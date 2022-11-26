@@ -1,0 +1,13 @@
+# Dependencies
+/node_modules
+
+# IDE
+.idea
+
+# Managers
+*.lock*
+*-lock*
+*.log*
+
+# Builds
+dist
