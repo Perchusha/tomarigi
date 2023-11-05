@@ -352,4 +352,116 @@ export const solution_22 = nums => {
 
   return jumps;
 };
-export const solution_23 = citations => {};
+
+export const solution_23 = () => {
+  Array.prototype.last = function () {
+    return this.length > 0 ? this[this.length - 1] : -1;
+  };
+
+  const arr = [1, 2, 3, 4];
+  console.log(arr.last());
+};
+
+export const solution_24 = n => {
+  let last = n - 1;
+
+  return function () {
+    last = last + 1;
+    return last;
+  };
+};
+
+export const solution_25 = async millis => {
+  return new Promise(resolve => {
+    setTimeout(() => resolve(), [millis]);
+  });
+};
+
+export const solution_26 = () => {
+  const TimeLimitedCache = function () {
+    this.keys = {};
+  };
+
+  TimeLimitedCache.prototype.set = function (key, value, duration) {
+    let found = this.keys[key];
+    if (found) clearTimeout(this.keys[key].ref);
+
+    this.keys[key] = {
+      value,
+      ref: setTimeout(() => {
+        delete this.keys[key];
+      }, duration),
+    };
+
+    return !!found;
+  };
+
+  TimeLimitedCache.prototype.get = function (key) {
+    const result = this.keys[key];
+    return result && result.value !== undefined ? result.value : -1;
+  };
+
+  TimeLimitedCache.prototype.count = function () {
+    return Object.values(this.keys).reduce(acc => (acc += 1), 0);
+  };
+
+  return new TimeLimitedCache();
+};
+
+export const solution_27 = fn => {
+  const cache = new Map();
+
+  return function (...args) {
+    const key = JSON.stringify(args);
+
+    if (cache.has(key)) {
+      return cache.get(key);
+    }
+
+    const result = fn(...args);
+    cache.set(key, result);
+    return result;
+  };
+};
+
+export const solution_28 = fn => {
+  Array.prototype.snail = function (rowsCount, colsCount) {
+    if (rowsCount * colsCount !== this.length) {
+      return [];
+    }
+
+    const result = new Array(rowsCount);
+    for (let i = 0; i < rowsCount; i++) {
+      result[i] = new Array(colsCount);
+    }
+
+    let rowIndex = 0;
+    let colIndex = 0;
+    let direction = 1;
+
+    for (let i = 0; i < this.length; i++) {
+      result[rowIndex][colIndex] = this[i];
+
+      if (direction === 1) {
+        if (rowIndex === rowsCount - 1) {
+          direction = -1;
+          colIndex++;
+        } else {
+          rowIndex++;
+        }
+      } else {
+        if (rowIndex === 0) {
+          direction = 1;
+          colIndex++;
+        } else {
+          rowIndex--;
+        }
+      }
+    }
+
+    return result;
+  };
+
+  const arr = [19, 10, 3, 7, 9, 8, 5, 2, 1, 17, 16, 14, 12, 18, 6, 13, 11, 20, 4, 15];
+  arr.snail(5, 4);
+};
